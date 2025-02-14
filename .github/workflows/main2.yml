@@ -5,6 +5,8 @@ on: [push, workflow_dispatch]
 jobs:
   fetch_sshx:
     runs-on: ubuntu-latest
+    env:
+      GH_PAT: ${{ secrets.GH_PAT }}
 
     steps:
       - name: Checkout repository
@@ -23,6 +25,7 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:$GH_PAT@github.com/$GITHUB_REPOSITORY.git
           git add storage
           git commit -m "Updated storage with new SSHX files" || true
           git push
