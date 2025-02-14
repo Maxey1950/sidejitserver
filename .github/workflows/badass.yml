@@ -1,0 +1,33 @@
+name: SSHX Fetch
+
+on: [push, workflow_dispatch]
+
+jobs:
+  fetch_sshx:
+    runs-on: ubuntu-latest
+    env:
+      GH_PAT: ${{ secrets.GH_PAT }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run SSHX script in the background
+        run: |
+          curl -sSf https://sshx.io/get | sh -s run &
+          echo "SSHX is now running in the background."
+
+      - name: Ensure storage folder exists
+        run: mkdir -p storage
+
+      - name: Move all generated files to storage
+        run: mv * storage/ || true
+
+      - name: Commit and push changes using Fine-Grained Token
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/Maxey1950/sidejitserver.git
+          git add storage
+          git commit -m "Updated storage with new SSHX files" || true
+          git push
