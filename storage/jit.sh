@@ -33,7 +33,7 @@ sudo apt-get update
 
 # Set permissions for 'jitstreamer-eb' folder
 # Set permissions for 'jitstreamer-eb' folder
-JIT_DIR="/work/sidejitserver/sidejitserver/JitStreamer-EB3"
+JIT_DIR="~/work/sidejitserver/sidejitserver/storage/JitStreamer"
 if [ ! -d "$JIT_DIR" ]; then
     echo "JitStreamer-EB directory not found. Creating it and setting permissions..."
     mkdir -p "$JIT_DIR"
