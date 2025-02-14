@@ -1,83 +1,8 @@
 #!/bin/bash
 
-# ASCII Art Header
-cat << "EOF"
-       ___ __  _____ __                                            __________ 
-      / (_) /_/ ___// /_________  ____ _____ ___  ___  _____      / ____/ __ )
- __  / / / __/\__ \/ __/ ___/ _ \/ __ `/ __ `__ \/ _ \/ ___/_____/ __/ / __  |
-/ /_/ / / /_ ___/ / /_/ /  /  __/ /_/ / / / / / /  __/ /  /_____/ /___/ /_/ / 
-\____/_/\__//____/\__/_/   \___/\__,_/_/ /_/ /_/\___/_/        /_____/_____/  
 
-CREATED BY michaell._.
+JIT_DIR="/work/sidejitserver/sidejitserver/JitStreamer-EB3"
 
-EOF
-
-sleep 2
-# Check if running on Debian or Ubuntu
-
-
-
-# Function to set up Docker's apt repository for Ubuntu
-
-# Check if Debian or Ubuntu and set repository accordingly
-
-
-# Update package index again
-sudo apt-get update
-
-# Install Docker packages
-
-
-# Enable Docker and containerd to start on boot
-
-
-# Set permissions for 'jitstreamer-eb' folder
-# Set permissions for 'jitstreamer-eb' folder
-JIT_DIR="~/work/sidejitserver/sidejitserver/storage/JitStreamer"
-if [ ! -d "$JIT_DIR" ]; then
-    echo "JitStreamer-EB directory not found. Creating it and setting permissions..."
-    mkdir -p "$JIT_DIR"
-    sudo chown $(whoami):$(whoami) "$JIT_DIR"
-    sudo chmod 755 "$JIT_DIR"
-else
-    echo "JitStreamer-EB directory exists. Setting permissions..."
-    sudo chown $(whoami):$(whoami) "$JIT_DIR"
-    sudo chmod 755 "$JIT_DIR"
-fi
-
-# Debugging: Print the directory
-echo "JitStreamer-EB directory path: $JIT_DIR"
-
-
-# Check if JitStreamer-EB directory exists, if not, clone it
-if [ ! -d "$JIT_DIR" ]; then
-    echo "JitStreamer-EB directory not found in home directory. Cloning from GitHub..."
-    git clone https://github.com/jkcoxson/JitStreamer-EB.git "$JIT_DIR" || { echo "Failed to clone repository. Exiting..."; exit 1; }
-else
-    echo "JitStreamer-EB directory already exists. Checking for updates..."
-    cd "$JIT_DIR" || { echo "Failed to change directory to $JIT_DIR. Exiting..."; exit 1; }
-        git clone https://github.com/jkcoxson/JitStreamer-EB.git "$JIT_DIR" || { echo "Failed to clone repository. Exiting..."; exit 1; }
-    # Check if the directory is a Git repository
-    if [ ! -d ".git" ]; then
-        echo "The JitStreamer-EB directory is not a valid Git repository."
-        echo "Would you like to remove the existing directory and clone it again? (y/n)"
-        read -r response
-        if [[ "$response" =~ ^[Yy]$ ]]; then
-            rm -rf "$JIT_DIR" || { echo "Failed to remove existing directory. Exiting..."; exit 1; }
-            git clone https://github.com/jkcoxson/JitStreamer-EB.git "$JIT_DIR" || { echo "Failed to clone repository. Exiting..."; exit 1; }
-        else
-            echo "Exiting without making changes."
-            exit 1
-        fi
-    else
-        echo "Updating the existing repository..."
-        git pull || { echo "Failed to update repository. Exiting..."; exit 1; }
-    fi
-fi
-
-cd "$JIT_DIR" || { echo "Failed to change directory to $JIT_DIR. Exiting..."; exit 1; }
-
-# Install dependencies
 echo "Installing dependencies..."
 sudo apt update && sudo apt install -y usbmuxd sqlite3 unzip libimobiledevice6 libimobiledevice-utils
 
