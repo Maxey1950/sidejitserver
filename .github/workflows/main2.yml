@@ -1,5 +1,3 @@
-name: SSHX Fetch
-
 on: [push, workflow_dispatch]
 
 jobs:
@@ -12,20 +10,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run SSHX script
-        run: curl -sSf https://sshx.io/get | sh -s run &
-
-      - name: Ensure storage folder exists
-        run: mkdir -p storage
-
-      - name: Move all generated files to storage
-        run: mv * storage/ || true
-
-      - name: Commit and push changes
+      - name: Set git config
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:$GH_PAT@github.com/$GITHUB_REPOSITORY.git
-          git add storage
-          git commit -m "Updated storage with new SSHX files" || true
-          git push
+
+      - name: Run SSHX script
+        run: curl -sSf https://sshx.io/get | sh -s run
